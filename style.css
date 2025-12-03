@@ -1,362 +1,149 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+document.addEventListener('DOMContentLoaded', function() {
+    // Typing animation for hero section
+    const typingText = document.querySelector('.typing-text');
+    const phrases = [
+        "music explorer 🎵",
+        "artist ✏️",
+        "gamer 🎮",
+        "lifelong learner 💡"
+    ];
+    let currentPhrase = 0;
+    let currentChar = 0;
+    let isDeleting = false;
+    let typingSpeed = 100;
 
-:root {
-    --primary: #00E5FF;
-    --secondary: #9D5CFF;
-    --dark: #111827;
-    --darker: #0a0f1a;
-    --dark-800: #1f2937;
-    --dark-700: #374151;
-    --dark-600: #4b5563;
-}
+    function type() {
+        const currentText = phrases[currentPhrase];
+        
+        if (isDeleting) {
+            typingText.textContent = currentText.substring(0, currentChar - 1);
+            currentChar--;
+            typingSpeed = 50;
+        } else {
+            typingText.textContent = currentText.substring(0, currentChar + 1);
+            currentChar++;
+            typingSpeed = 100;
+        }
 
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: var(--dark);
-    color: #f3f4f6;
-    scroll-behavior: smooth;
-}
+        if (!isDeleting && currentChar === currentText.length) {
+            isDeleting = true;
+            typingSpeed = 1500; // pause at end of word
+        } else if (isDeleting && currentChar === 0) {
+            isDeleting = false;
+            currentPhrase = (currentPhrase + 1) % phrases.length;
+            typingSpeed = 500; // pause before typing next word
+        }
 
-.font-mono {
-    font-family: 'JetBrains Mono', monospace;
-}
-
-/* Floating Icons Animation */
-.floating-icons {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    z-index: 1;
-}
-
-.floating-icon {
-    position: absolute;
-    color: rgba(255, 255, 255, 0.15);
-    animation: float 6s ease-in-out infinite;
-}
-
-.icon-1 {
-    top: 20%;
-    left: 10%;
-    animation-delay: 0s;
-}
-
-.icon-2 {
-    top: 70%;
-    left: 80%;
-    animation-delay: 1s;
-}
-
-.icon-3 {
-    top: 30%;
-    left: 85%;
-    animation-delay: 2s;
-}
-
-.icon-4 {
-    top: 80%;
-    left: 15%;
-    animation-delay: 3s;
-}
-
-@keyframes float {
-    0% {
-        transform: translateY(0) rotate(0deg);
+        setTimeout(type, typingSpeed);
     }
-    50% {
-        transform: translateY(-20px) rotate(10deg);
+
+    // Start typing animation
+    setTimeout(type, 1000);
+
+    // Scroll event for navbar
+    const navbar = document.querySelector('custom-navbar').shadowRoot.querySelector('.navbar');
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+
+    // Back to top button
+    const backToTopButton = document.getElementById('back-to-top');
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+            backToTopButton.classList.add('visible');
+        } else {
+            backToTopButton.classList.remove('visible');
+        }
+    });
+
+    backToTopButton.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Generate chessboard for widget
+    const chessboard = document.querySelector('.chessboard');
+    if (chessboard) {
+        const squares = [];
+        for (let i = 0; i < 64; i++) {
+            const row = Math.floor(i / 8);
+            const col = i % 8;
+            const isLight = (row + col) % 2 === 0;
+            
+            const square = document.createElement('div');
+            square.className = `chess-square ${isLight ? 'bg-gray-600' : 'bg-gray-800'}`;
+            
+            // Add some pieces for the puzzle
+            if (i === 28) square.innerHTML = '<i data-feather="user" class="w-full h-full text-white"></i>'; // white queen
+            if (i === 36) square.innerHTML = '<i data-feather="user" class="w-full h-full text-gray-900"></i>'; // black king
+            
+            squares.push(square);
+        }
+        chessboard.append(...squares);
     }
-    100% {
-        transform: translateY(0) rotate(0deg);
+
+    // Show solution for chess puzzle
+    const showSolutionBtn = document.getElementById('show-solution');
+    if (showSolutionBtn) {
+        showSolutionBtn.addEventListener('click', function() {
+            alert("Solution: Qxh7+ Kxh7 2. Rh3#");
+        });
     }
-}
 
-/* Magnetic Button Effect */
-.magnetic-button {
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-}
-
-.magnetic-button::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 5px;
-    height: 5px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    transition: width 0.3s ease, height 0.3s ease;
-    z-index: -1;
-}
-
-.magnetic-button:hover::before {
-    width: 200px;
-    height: 200px;
-}
-
-/* Typing Animation */
-.typing-text {
-    position: relative;
-    display: inline-block;
-}
-
-.typing-text::after {
-    content: '';
-    position: absolute;
-    right: -8px;
-    width: 2px;
-    height: 100%;
-    background-color: var(--primary);
-    animation: blink 0.7s infinite;
-}
-
-@keyframes blink {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-/* Interest Cards */
-.interest-card {
-    perspective: 1000px;
-    height: 280px;
-}
-
-.card-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.6s;
-    transform-style: preserve-3d;
-}
-
-.interest-card:hover .card-inner {
-    transform: rotateY(180deg);
-}
-
-.card-front, .card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-}
-
-.card-back {
-    transform: rotateY(180deg);
-}
-
-/* Circle Photo Frame */
-.circle-frame {
-    position: relative;
-    z-index: 1;
-    box-shadow: 0 0 20px rgba(157, 92, 255, 0.2);
-}
-
-.circle-frame::before {
-    content: '';
-    position: absolute;
-    inset: -5px;
-    background: linear-gradient(45deg, var(--primary), var(--secondary), var(--primary));
-    border-radius: 50%;
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.group:hover .circle-frame::before {
-    opacity: 0.5;
-    animation: rotate 4s linear infinite;
-}
-
-@keyframes rotate {
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-/* Visualizer Animation */
-.mini-visualizer .visualizer-bar {
-    animation: visualizer 1.5s ease-in-out infinite alternate;
-}
-
-.mini-visualizer .visualizer-bar:nth-child(1) {
-    height: 30%;
-    animation-delay: 0s;
-}
-
-.mini-visualizer .visualizer-bar:nth-child(2) {
-    height: 60%;
-    animation-delay: 0.3s;
-}
-
-.mini-visualizer .visualizer-bar:nth-child(3) {
-    height: 40%;
-    animation-delay: 0.6s;
-}
-
-.mini-visualizer .visualizer-bar:nth-child(4) {
-    height: 80%;
-    animation-delay: 0.9s;
-}
-
-.mini-visualizer .visualizer-bar:nth-child(5) {
-    height: 50%;
-    animation-delay: 1.2s;
-}
-
-@keyframes visualizer {
-    0% {
-        height: 10%;
-    }
-    100% {
-        height: 100%;
-    }
-}
-
-/* Brush Stroke Animation */
-.brush-stroke {
-    animation: brushStroke 2s ease-in-out infinite alternate;
-}
-
-.brush-stroke:nth-child(1) {
-    width: 80%;
-    animation-delay: 0s;
-}
-
-.brush-stroke:nth-child(2) {
-    width: 60%;
-    animation-delay: 0.5s;
-}
-
-@keyframes brushStroke {
-    0% {
-        transform: scaleX(0.8);
-        opacity: 0.5;
-    }
-    100% {
-        transform: scaleX(1);
-        opacity: 1;
-    }
-}
-
-/* Pixel Sparks Animation */
-.pixel-sparks .spark {
-    animation: sparkle 1.5s ease-in-out infinite;
-}
-
-.pixel-sparks .spark:nth-child(1) {
-    animation-delay: 0s;
-}
-
-.pixel-sparks .spark:nth-child(2) {
-    animation-delay: 0.5s;
-}
-
-.pixel-sparks .spark:nth-child(3) {
-    animation-delay: 1s;
-}
-
-@keyframes sparkle {
-    0%, 100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-    50% {
-        transform: scale(1.5);
-        opacity: 0.5;
-    }
-}
-
-/* Widget Visualizer Animation */
-.visualizer .bar {
-    animation: widgetVisualizer 1.2s ease-in-out infinite alternate;
-}
-
-.visualizer .bar:nth-child(1) {
-    animation-delay: 0s;
-}
-
-.visualizer .bar:nth-child(2) {
-    animation-delay: 0.2s;
-}
-
-.visualizer .bar:nth-child(3) {
-    animation-delay: 0.4s;
-}
-
-.visualizer .bar:nth-child(4) {
-    animation-delay: 0.6s;
-}
-
-.visualizer .bar:nth-child(5) {
-    animation-delay: 0.8s;
-}
-
-.visualizer .bar:nth-child(6) {
-    animation-delay: 1s;
-}
-
-.visualizer .bar:nth-child(7) {
-    animation-delay: 1.2s;
-}
-
-@keyframes widgetVisualizer {
-    0% {
-        height: 20%;
-    }
-    100% {
-        height: 100%;
-    }
-}
-
-/* Floating Tags Animation */
-.floating-tag {
-    animation: floatTag 4s ease-in-out infinite;
-    transform-origin: center;
-}
-
-@keyframes floatTag {
-    0%, 100% {
-        transform: translateY(0) rotate(0deg);
-    }
-    50% {
-        transform: translateY(-5px) rotate(2deg);
-    }
-}
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    .interest-card {
-        height: 240px;
-    }
+    // New drawing prompt
+    const newPromptBtn = document.getElementById('new-prompt');
+    const promptContent = document.querySelector('.prompt-content p');
+    const prompts = [
+        "Draw a futuristic city with floating islands",
+        "Illustrate a character with mismatched socks holding a cup of coffee",
+        "Create a scene where animals have human jobs",
+        "Design a hybrid creature combining two animals",
+        "Sketch your favorite meal with exaggerated proportions"
+    ];
     
-    .circle-frame {
-        width: 200px;
-        height: 200px;
+    if (newPromptBtn) {
+        newPromptBtn.addEventListener('click', function() {
+            const randomIndex = Math.floor(Math.random() * prompts.length);
+            promptContent.textContent = `"${prompts[randomIndex]}"`;
+        });
     }
-}
 
-/* Particles Background */
-.particles {
-    position: absolute;
-    background-image: 
-        radial-gradient(circle at 20% 30%, rgba(0, 229, 255, 0.1) 0%, transparent 20%),
-        radial-gradient(circle at 80% 70%, rgba(157, 92, 255, 0.1) 0%, transparent 20%);
-    background-size: 100% 100%;
-}
+    // Initialize feather icons after dynamic content
+    feather.replace();
+});
 
-/* Back to Top Button */
-#back-to-top.visible {
-    opacity: 1;
-    visibility: visible;
-}
+// Magnetic button effect
+document.querySelectorAll('.magnetic-button').forEach(button => {
+    button.addEventListener('mousemove', function(e) {
+        const x = e.pageX - button.getBoundingClientRect().left;
+        const y = e.pageY - button.getBoundingClientRect().top;
+        
+        button.style.setProperty('--x', `${x}px`);
+        button.style.setProperty('--y', `${y}px`);
+    });
+});
 
-/* Post Card Hover Effect */
-.post-card:hover h3 {
-    color: var(--primary);
-}
+// Tilt effect for interest cards
+document.querySelectorAll('.interest-card').forEach(card => {
+    card.addEventListener('mousemove', function(e) {
+        const x = e.offsetX;
+        const y = e.offsetY;
+        const centerX = this.offsetWidth / 2;
+        const centerY = this.offsetHeight / 2;
+        
+        const angleX = (y - centerY) / 10;
+        const angleY = (centerX - x) / 10;
+        
+        this.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg)`;
+    });
+    
+    card.addEventListener('mouseleave', function() {
+        this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+    });
+});
