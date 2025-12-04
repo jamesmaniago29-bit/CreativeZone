@@ -66,37 +66,27 @@ document.addEventListener('DOMContentLoaded', function() {
             behavior: 'smooth'
         });
     });
-
-    // Generate chessboard for widget
-    const chessboard = document.querySelector('.chessboard');
-    if (chessboard) {
-        const squares = [];
-        for (let i = 0; i < 64; i++) {
-            const row = Math.floor(i / 8);
-            const col = i % 8;
-            const isLight = (row + col) % 2 === 0;
-            
-            const square = document.createElement('div');
-            square.className = `chess-square ${isLight ? 'bg-gray-600' : 'bg-gray-800'}`;
-            
-            // Add some pieces for the puzzle
-            if (i === 28) square.innerHTML = '<i data-feather="user" class="w-full h-full text-white"></i>'; // white queen
-            if (i === 36) square.innerHTML = '<i data-feather="user" class="w-full h-full text-gray-900"></i>'; // black king
-            
-            squares.push(square);
-        }
-        chessboard.append(...squares);
-    }
-
-    // Show solution for chess puzzle
-    const showSolutionBtn = document.getElementById('show-solution');
-    if (showSolutionBtn) {
-        showSolutionBtn.addEventListener('click', function() {
-            alert("Solution: Qxh7+ Kxh7 2. Rh3#");
+    // Music recommendations
+    const newRecommendationBtn = document.getElementById('new-recommendation');
+    const recommendationContent = document.querySelector('.recommendation-content');
+    const recommendations = [
+        { artist: "Cup of Joe", song: "Tingin", image: "https://huggingface.co/spaces/Potatoes1003/melopixel-playscape/resolve/main/images/ab67616d00001e0285a7fd707d00e5d255807add.jpg" },
+        { artist: "Sugarcane", song: "Mundo", image: "https://huggingface.co/spaces/Potatoes1003/melopixel-playscape/resolve/main/images/ab67616d0000b2735a00b0d5d5a19a3b7a1e9d5e.jpg" },
+        { artist: "Rico Blanco", song: "Your Universe", image: "https://huggingface.co/spaces/Potatoes1003/melopixel-playscape/resolve/main/images/ab67616d0000b2735a00b0d5d5a19a3b7a1e9d5e.jpg" },
+        { artist: "Ben&Ben", song: "Leaves", image: "https://huggingface.co/spaces/Potatoes1003/melopixel-playscape/resolve/main/images/ab67616d0000b2735a00b0d5d5a19a3b7a1e9d5e.jpg" }
+    ];
+    
+    if (newRecommendationBtn) {
+        newRecommendationBtn.addEventListener('click', function() {
+            const randomIndex = Math.floor(Math.random() * recommendations.length);
+            const rec = recommendations[randomIndex];
+            document.querySelector('.recommendation-content img').src = rec.image;
+            document.querySelector('.recommendation-content h4').textContent = rec.artist;
+            document.querySelector('.recommendation-content p').textContent = rec.song;
         });
     }
 
-    // New drawing prompt
+// New drawing prompt
     const newPromptBtn = document.getElementById('new-prompt');
     const promptContent = document.querySelector('.prompt-content p');
     const prompts = [
