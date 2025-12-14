@@ -217,33 +217,29 @@ body {
         height: 100%;
     }
 }
-
-/* Brush Stroke Animation */
-.brush-stroke {
-    animation: brushStroke 2s ease-in-out infinite alternate;
-}
-
-.brush-stroke:nth-child(1) {
-    width: 80%;
-    animation-delay: 0s;
-}
-
-.brush-stroke:nth-child(2) {
-    width: 60%;
-    animation-delay: 0.5s;
-}
-
-@keyframes brushStroke {
-    0% {
-        transform: scaleX(0.8);
-        opacity: 0.5;
+/* Pencil Animation */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
     }
-    100% {
-        transform: scaleX(1);
-        opacity: 1;
+    50% {
+        transform: translateY(-10px);
     }
 }
 
+.animate-bounce {
+    animation: bounce 2s ease-in-out infinite;
+}
+
+.pencil-animation::after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, rgba(157, 92, 255, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: bounce 2.2s ease-in-out infinite;
+}
 /* Pixel Sparks Animation */
 .pixel-sparks .spark {
     animation: sparkle 1.5s ease-in-out infinite;
