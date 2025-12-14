@@ -73,8 +73,9 @@ document.addEventListener('DOMContentLoaded', function() {
         { artist: "Cup of Joe", song: "Tingin", image: "https://huggingface.co/spaces/Potatoes1003/melopixel-playscape/resolve/main/images/ab67616d00001e0285a7fd707d00e5d255807add.jpg" },
         { artist: "Sugarcane", song: "Mundo", image: "https://huggingface.co/spaces/Potatoes1003/melopixel-playscape/resolve/main/images/ab67616d0000b2735a00b0d5d5a19a3b7a1e9d5e.jpg" },
         { artist: "Rico Blanco", song: "Your Universe", image: "https://huggingface.co/spaces/Potatoes1003/melopixel-playscape/resolve/main/images/ab67616d0000b2735a00b0d5d5a19a3b7a1e9d5e.jpg" },
-        { artist: "Ben&Ben", song: "Leaves", image: "https://huggingface.co/spaces/Potatoes1003/melopixel-playscape/resolve/main/images/ab67616d0000b2735a00b0d5d5a19a3b7a1e9d5e.jpg" }
-    ];
+        { artist: "Ben&Ben", song: "Leaves", image: "https://huggingface.co/spaces/Potatoes1003/melopixel-playscape/resolve/main/images/ab67616d0000b2735a00b0d5d5a19a3b7a1e9d5e.jpg" },
+        { artist: "Magnus Carlsen", song: "Chess Master", image: "http://static.photos/education/640x360/1?chess" }
+];
     
     if (newRecommendationBtn) {
         newRecommendationBtn.addEventListener('click', function() {
@@ -90,14 +91,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const newPromptBtn = document.getElementById('new-prompt');
     const promptContent = document.querySelector('.prompt-content p');
     const prompts = [
-        "Draw a futuristic city with floating islands",
-        "Illustrate a character with mismatched socks holding a cup of coffee",
-        "Create a scene where animals have human jobs",
-        "Design a hybrid creature combining two animals",
-        "Sketch your favorite meal with exaggerated proportions"
+        "Describe your most memorable sunrise experience",
+        "Share about a local dish you discovered while traveling",
+        "What's the most breathtaking view you've encountered?",
+        "Tell us about a cultural tradition you experienced",
+        "Describe an unexpected adventure you had"
     ];
-    
-    if (newPromptBtn) {
+if (newPromptBtn) {
         newPromptBtn.addEventListener('click', function() {
             const randomIndex = Math.floor(Math.random() * prompts.length);
             promptContent.textContent = `"${prompts[randomIndex]}"`;
